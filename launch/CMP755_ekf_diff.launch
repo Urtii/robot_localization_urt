@@ -1,0 +1,24 @@
+<launch>
+    
+    <!--- Sim Time -->
+    <param name="/use_sim_time" value="true" />
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="poese_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/CMP755_loam_diff.yaml" />
+
+    <!--  Placeholder for output topic remapping-->
+    <remap from="odometry/filtered" to="flat_odometry"/>
+    <remap from="accel/filtered" to="flat_accel"/>
+
+  </node>
+  <node pkg="robot_localization" type="ekf_localization_node" name="pose_with_cov_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/CMP755_loam_w_covariance_diff.yaml" />
+
+    <!--  Placeholder for output topic remapping-->
+    <remap from="odometry/filtered" to="cov_odometry"/>
+    <remap from="accel/filtered" to="cov_accel"/>
+
+  </node>
+
+  <include file="$(find lego_loam_bor)/launch/run.launch"/>
+</launch>
