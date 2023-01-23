@@ -1,0 +1,115 @@
+<launch>
+    
+  <!--- Sim Time -->
+   <param name="/use_sim_time" value="true" />
+
+    <!--  flat odom-->
+  <node pkg="robot_localization" type="ekf_localization_node" name="pose_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/CMP755_loam_diff.yaml" />
+
+    <remap from="odometry/filtered" to="flat_odometry"/>
+    <remap from="accel/filtered" to="flat_accel"/>
+
+  </node>  
+  <!--
+  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_flat" respawn="true">
+
+    <param name="magnetic_declination_radians" value="0"/>
+
+    <param name="yaw_offset" value="0"/>
+    
+    <remap from="/odometry/filtered" to="flat_odometry" />
+    <remap from="/odometry/gps" to="/odometry/gps/flat" />
+
+  </node>-->
+
+
+
+    <!--  flat odom + IMU-->
+  <node pkg="robot_localization" type="ekf_localization_node" name="pose_IMU_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/ELE779_loam_diff.yaml" />
+
+    <remap from="odometry/filtered" to="flat_odometry_IMU"/>
+    <remap from="accel/filtered" to="flat_accel_IMU"/>
+
+  </node>  
+  <!--
+  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_flat_IMU" respawn="true">
+
+    <param name="magnetic_declination_radians" value="0"/>
+
+    <param name="yaw_offset" value="0"/>
+    
+    <remap from="/odometry/filtered" to="flat_odometry_IMU" />
+    <remap from="/odometry/gps" to="/odometry/gps/flat_IMU" />
+
+  </node>-->
+
+
+
+    <!--  cov odom -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="pose_with_cov_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/CMP755_loam_w_covariance_diff.yaml" />
+
+    <remap from="odometry/filtered" to="cov_odometry"/>
+    <remap from="accel/filtered" to="cov_accel"/>
+
+  </node>  
+  <!--
+  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_cov" respawn="true">
+
+    <param name="magnetic_declination_radians" value="0"/>
+
+    <param name="yaw_offset" value="0"/>
+    
+    <remap from="/odometry/filtered" to="cov_odometry" />
+    <remap from="/odometry/gps" to="/odometry/gps/cov" />
+
+  </node>-->
+
+
+
+    <!--  cov odom + IMU-->
+  <node pkg="robot_localization" type="ekf_localization_node" name="pose_with_cov_IMU_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/ELE779_loam_w_covariance_diff.yaml" />
+
+    <remap from="odometry/filtered" to="cov_odometry_IMU"/>
+    <remap from="accel/filtered" to="cov_accel_IMU"/>
+
+  </node>  
+  <!--
+  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_cov_IMU" respawn="true">
+
+    <param name="magnetic_declination_radians" value="0"/>
+
+    <param name="yaw_offset" value="0"/>
+    
+    <remap from="/odometry/filtered" to="cov_odometry_IMU" />
+    <remap from="/odometry/gps" to="/odometry/gps/cov_IMU" />
+
+  </node>-->
+
+
+
+    <!--  IMU-->
+  <node pkg="robot_localization" type="ekf_localization_node" name="IMU_ekf" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/ELE779_IMU.yaml" />
+
+    <remap from="odometry/filtered" to="odometry_IMU"/>
+    <remap from="accel/filtered" to="accel_IMU"/>
+
+  </node>  
+  <!--
+  <node pkg="robot_localization" type="navsat_transform_node" name="navsat_transform_node_IMU" respawn="true">
+
+    <param name="magnetic_declination_radians" value="0"/>
+
+    <param name="yaw_offset" value="0"/>
+    
+    <remap from="/odometry/filtered" to="odometry_IMU" />
+    <remap from="/odometry/gps" to="/odometry/gps/IMU" />
+
+  </node>-->
+
+  <include file="$(find lego_loam_bor)/launch/run.launch"/>
+</launch>
