@@ -4,7 +4,7 @@
     <param name="/use_sim_time" value="true" />
 
   <node pkg="robot_localization" type="ekf_localization_node" name="poese_ekf" clear_params="true">
-    <rosparam command="load" file="$(find robot_localization)/params/CMP755_loam_abs.yaml" />
+    <rosparam command="load" file="$(find robot_localization)/params/CMP755_abs.yaml" />
 
     <!--  Placeholder for output topic remapping-->
     <remap from="odometry/filtered" to="flat_odometry"/>
@@ -20,5 +20,5 @@
 
   </node>
 
-  <include file="$(find lego_loam_bor)/launch/run.launch"/>
+  <include file="$(find lego_loam)/launch/run.launch"/>
 </launch>
