@@ -1,0 +1,17 @@
+<launch>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_gps" args="0 0 0 0 0 0 1 base_link gps_link" />
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_map" clear_params="true">
+    <rosparam command="load" file="$(find robot_localization)/params/ekf_map.yaml" />
+
+    <remap from="odometry/filtered" to="/odometry/filtered/global"/>
+    <remap from="/imu/data" to="/imu"/>
+    
+    <!--  Placeholder for output topic remapping
+    <remap from="accel/filtered" to=""/>
+    -->
+
+  </node>
+
+</launch>
