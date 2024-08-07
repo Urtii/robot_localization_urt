@@ -3,11 +3,12 @@
   <!--- Sim Time -->
   <param name="/use_sim_time" value="true" />
 
-  <node pkg="tf2_ros" type="static_transform_publisher" name="UTM_to_gT" 
-  args="0 0 0 -0.0034064189 0.017186207 -0.0330119968 0.999388993 UTM UTM_52S" />
+  <!--node pkg="tf2_ros" type="static_transform_publisher" name="UTM_52S_to_map" 
+  args="353610.3623 4025986.43 19.33936483 0 0 0 1 UTM_52S map" /-->
 
-  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_UTM" 
-  args="-353610.3623 -4025986.43 -19.33936483 0 0 0 1 map UTM_52S" />
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="utm_to_UTM_52S" args="0 0 45 0 0 0 1 utm UTM_52S" />
+  
 
 
   <!-- Madgwick Filter for IMU & Magnetometer
@@ -28,7 +29,7 @@
   <include file="$(find robot_localization)/launch/navsat_transform_thesis.launch"> </include>
 
   <node pkg="rosbag" type="play" name="rosbagplay" 
-  args="/media/onurcan/Storage/Dataset/MULRAN/Riverside2/Raw/LiDAR_INS_gT.bag --clock -d 5" required="true"/> 
+  args="/media/onurcan/Storage/Dataset/MULRAN/Riverside2/Raw/LiDAR_INS_gT.bag --clock -d 5 -r 0.5"/> 
 
   <!-- Start RViz -->
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find launcher)/rviz/rl_test.rviz" output="screen" />
