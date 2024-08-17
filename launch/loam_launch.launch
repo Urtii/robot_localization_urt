@@ -1,0 +1,38 @@
+<launch>
+
+  <!--- Sim Time -->
+  <param name="/use_sim_time" value="true" />
+
+  <!--node pkg="tf2_ros" type="static_transform_publisher" name="UTM_52S_to_map" 
+  args="353610.3623 4025986.43 19.33936483 0 0 0 1 UTM_52S map" /-->
+
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="utm_to_UTM_52S" args="0 0 45 0 0 0 1 utm UTM_52S" />
+  
+
+
+  <!-- Madgwick Filter for IMU & Magnetometer
+  <include file="$(find imu_filter_madgwick)/launch/imu_filter_madgwick.launch">
+
+    <arg name="ImuFilterNodelet/publish_tf"             value="false" />  <!- Publish TF transform representing the IMU orientation ->
+    <arg name="ImuFilterNodelet/use_mag"                value="true"/>    <!- Whether to use magnetic field data ->
+    <arg name="ImuFilterNodelet/world_frame"            value="enu"/>     <!- World frame. Valid values: "nwu", "enu", "ned" ->
+    <arg name="ImuFilterNodelet/fixed_frame"            value="odom"/>    <!- Parent frame to be used in publish_tf ->
+    <arg name="ImuFilterNodelet/publish_debug_topics"   value="false"/>   <!- Publish debug topics if true ->
+    <arg name="ImuFilterNodelet/stateless"              value="false"/>   <!- Publish a stateless estimate of orientation if true ->
+
+  </include> -->
+  
+  <!-- robot_locaization -->
+  <include file="$(find robot_localization)/launch/loam_ekf_odom.launch"> </include>
+  <include file="$(find robot_localization)/launch/loam_ekf_map.launch"> </include>
+  <include file="$(find robot_localization)/launch/navsat_transform_thesis.launch"> </include>
+
+  <node pkg="rosbag" type="play" name="rosbagplay" 
+  args="/media/onurcan/Storage/Dataset/MULRAN/Riverside2/Raw/LiDAR_INS_gT.bag --clock -d 5"/> 
+
+  <!-- Start RViz -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find launcher)/rviz/rl_test.rviz" output="screen" />
+
+
+</launch>
