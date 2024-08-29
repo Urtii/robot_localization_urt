@@ -28,11 +28,8 @@
   <include file="$(find robot_localization)/launch/loam_ekf_map.launch"> </include>
   <include file="$(find robot_localization)/launch/navsat_transform_thesis.launch"> </include>
 
-  <node pkg="rosbag" type="play" name="rosbagplay" 
-  args="/media/onurcan/Storage/Dataset/MULRAN/Riverside2/Raw/LiDAR_INS_gT.bag --clock -d 5"/> 
-
-  <!-- Start RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find launcher)/rviz/rl_test.rviz" output="screen" />
+  <!-- Start RViz
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find launcher)/rviz/rl_test.rviz" output="screen" /> -->
 
 
 </launch>
