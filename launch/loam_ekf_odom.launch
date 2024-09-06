@@ -10,6 +10,7 @@
 
     <remap from="/imu/data" to="/imu"/>
     <remap from="odometry/filtered" to="/odometry/filtered/local"/>
+    <remap from="lidar_odometry/filtered" to="/lidar_odometry/filtered/local"/>
 
   </node> 
 

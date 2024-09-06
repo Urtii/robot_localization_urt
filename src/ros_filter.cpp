@@ -144,6 +144,8 @@ namespace RobotLocalization
 
     // Publisher
     positionPub_ = nh_.advertise<nav_msgs::Odometry>("odometry/filtered", 20);
+    position_lidar_Pub_ =
+        nh_.advertise<nav_msgs::Odometry>("lidar_odometry/filtered", 20);
 
     // Optional acceleration publisher
     if (publishAcceleration_)
@@ -604,6 +606,10 @@ namespace RobotLocalization
       {
         RF_DEBUG("Received a measurement that was " << filter_.getLastMeasurementTime() - firstMeasurement->time_ <<
                  " seconds in the past. Reverting filter state and measurement queue...");
+        ROS_WARN(
+            "Received a measurement that was %f seconds in the past. Reverting "
+            "filter state and measurement queue...",
+            filter_.getLastMeasurementTime() - firstMeasurement->time_);
 
         int originalCount = static_cast<int>(measurementQueue_.size());
         const double firstMeasurementTime =  firstMeasurement->time_;
@@ -660,6 +666,36 @@ namespace RobotLocalization
               ::fabs(measurementQueue_.top()->time_ - filter_.getLastMeasurementTime()) > 1e-9)
           {
             saveFilterState(filter_);
+          }
+        }
+
+        // Check if the message is a lidar measurement and publish current state
+        // if it is
+        if (measurement->topicName_.find("twist0") != std::string::npos) {
+          // ROS_WARN("Found lidar message in ekf. topic is: %s",
+          //          measurement->topicName_.c_str());
+          //  Get latest state and publish it
+          nav_msgs::Odometry filteredLiDARPosition;
+
+          if (getFilteredOdometryMessage(filteredLiDARPosition)) {
+            // the filteredLiDARPosition is the message containing the state and
+            // covariances: nav_msgs Odometry
+            // ROS_WARN("Got message in ekf");
+
+            if (!validateFilterOutput(filteredLiDARPosition)) {
+              ROS_ERROR_STREAM(
+                  "Critical Error, NaNs were detected in the output state of "
+                  "the filter."
+                  << " This was likely due to poorly conditioned process, "
+                     "noise, or sensor covariances.");
+            }
+
+            filteredLiDARPosition.child_frame_id = "ekf_lidar";
+
+            // Fire off the position of lidar
+            position_lidar_Pub_.publish(filteredLiDARPosition);
+            // ROS_WARN("Published lidar message in ekf. child frame is: %f",
+            //          filteredLiDARPosition.header.stamp.toSec());
           }
         }
       }

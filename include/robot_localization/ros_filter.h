@@ -682,6 +682,10 @@ template<class T> class RosFilter
     //!
     ros::Publisher positionPub_;
 
+    //! @brief lidar position publisher
+    //!
+    ros::Publisher position_lidar_Pub_;
+
     //! @brief Subscribes to the control input topic
     //!
     ros::Subscriber controlSub_;

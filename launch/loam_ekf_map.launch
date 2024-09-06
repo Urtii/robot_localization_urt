@@ -6,6 +6,7 @@
     <rosparam command="load" file="$(find robot_localization)/params/loam_ekf_map.yaml" />
 
     <remap from="odometry/filtered" to="/odometry/filtered/global"/>
+    <remap from="lidar_odometry/filtered" to="/lidar_odometry/filtered/global"/>
     <remap from="/imu/data" to="/imu"/>
 
   </node>
